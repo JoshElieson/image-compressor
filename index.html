@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Squeeze — Image Compressor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-orbs" aria-hidden="true">
+      <span class="orb orb-1"></span>
+      <span class="orb orb-2"></span>
+      <span class="orb orb-3"></span>
+    </div>
+
+    <div class="app">
+      <header class="header">
+        <div class="logo" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="url(#logoGrad)" />
+            <path
+              d="M9 14h6a3 3 0 0 0 0-6H9v6zm0 10h8a4 4 0 0 0 0-8H9v8zm14-14h-4v4h4V10zm0 6h-4v6h4v-6z"
+              fill="white"
+              opacity="0.95"
+            />
+            <defs>
+              <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32">
+                <stop stop-color="#22d3ee" />
+                <stop offset="1" stop-color="#818cf8" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <h1>Squeeze</h1>
+          <p class="tagline">Fast, private image compression in your browser</p>
+        </div>
+      </header>
+
+      <main>
+        <section class="panel controls-panel">
+          <div
+            id="dropzone"
+            class="dropzone"
+            tabindex="0"
+            role="button"
+            aria-label="Upload image by clicking or dragging"
+          >
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,image/bmp,image/avif,image/svg+xml,image/tiff,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.gif,.bmp,.avif,.svg,.tif,.tiff,.heic,.heif"
+              hidden
+            />
+            <div class="dropzone-inner">
+              <div class="dropzone-icon">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                  <path
+                    d="M24 32V16m0 0l-6 6m6-6l6 6"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M8 32v4a4 4 0 004 4h24a4 4 0 004-4v-4"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <p class="dropzone-title">Drop an image here</p>
+              <p class="dropzone-hint">or click to browse</p>
+              <p class="dropzone-formats">
+                JPEG · PNG · WebP · GIF · BMP · AVIF · SVG · TIFF · HEIC
+              </p>
+            </div>
+          </div>
+
+          <div class="options" id="options" hidden>
+            <label class="option-label">Compression level</label>
+            <div class="level-group" role="radiogroup" aria-label="Compression level">
+              <label class="level-btn">
+                <input type="radio" name="level" value="high" checked />
+                <span class="level-content">
+                  <span class="level-name">High</span>
+                  <span class="level-desc">Best quality</span>
+                  <span class="level-estimate" data-level="high">—</span>
+                </span>
+              </label>
+              <label class="level-btn">
+                <input type="radio" name="level" value="medium" />
+                <span class="level-content">
+                  <span class="level-name">Medium</span>
+                  <span class="level-desc">Balanced</span>
+                  <span class="level-estimate" data-level="medium">—</span>
+                </span>
+              </label>
+              <label class="level-btn">
+                <input type="radio" name="level" value="low" />
+                <span class="level-content">
+                  <span class="level-name">Low</span>
+                  <span class="level-desc">Smallest file</span>
+                  <span class="level-estimate" data-level="low">—</span>
+                </span>
+              </label>
+            </div>
+
+            <label class="option-label" for="formatSelect">Output format</label>
+            <select id="formatSelect" class="format-select">
+              <option value="auto">Auto (smart)</option>
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/webp">WebP</option>
+              <option value="image/png">PNG</option>
+            </select>
+
+            <button type="button" id="compressBtn" class="btn btn-primary">
+              <span class="btn-text">Compress image</span>
+              <span class="btn-spinner" hidden></span>
+            </button>
+            <button type="button" id="resetBtn" class="btn btn-ghost">Choose another</button>
+          </div>
+        </section>
+
+        <section class="panel results-panel" id="resultsPanel" hidden>
+          <h2 class="results-title">Results</h2>
+
+          <div class="stats-bar" id="statsBar">
+            <div class="stat">
+              <span class="stat-label">Original</span>
+              <span class="stat-value" id="originalSize">—</span>
+            </div>
+            <div class="stat-arrow" aria-hidden="true">→</div>
+            <div class="stat stat-highlight">
+              <span class="stat-label">Compressed</span>
+              <span class="stat-value" id="compressedSize">—</span>
+            </div>
+            <div class="stat stat-savings">
+              <span class="stat-label">Saved</span>
+              <span class="stat-value" id="savingsPercent">—</span>
+            </div>
+          </div>
+
+          <div class="preview-grid">
+            <figure class="preview-card">
+              <figcaption>Original</figcaption>
+              <div class="preview-frame">
+                <img id="originalPreview" alt="Original image preview" />
+              </div>
+            </figure>
+            <figure class="preview-card">
+              <figcaption>Compressed</figcaption>
+              <div class="preview-frame">
+                <img id="compressedPreview" alt="Compressed image preview" />
+              </div>
+            </figure>
+          </div>
+
+          <p class="meta-line" id="metaLine"></p>
+
+          <a id="downloadBtn" class="btn btn-primary btn-download" download>
+            Download compressed image
+          </a>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>Images never leave your device — everything runs locally in your browser.</p>
+      </footer>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
