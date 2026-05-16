@@ -1,4 +1,4 @@
-[Squeeze](https://joshelieson.github.io/Squeeze-Image-Compressor/)
+[Live Site](https://joshelieson.github.io/Squeeze-Image-Compressor/)
 
 # Squeeze
 
