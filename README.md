@@ -6,7 +6,7 @@ Squeeze is designed as a simple privacy-friendly utility: users can drag and dro
 
 ## Live Site
 
-[Squeeze](https://your-live-link-here.com)
+[Squeeze](https://joshelieson.github.io/Squeeze-Image-Compressor/)
 
 ## Why I Built It
 
